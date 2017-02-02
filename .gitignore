@@ -1,3 +1,4 @@
 flask
+tmp
 *.pyc
 *.swp
