@@ -1,4 +1,12 @@
-from app import db
+import sys
+
+if sys.version_info >= (3, 0):
+    enable_search = False
+else:
+    enable_search = True
+    import flask_whooshalchemy as whooshalchemy
+
+from app import app, db
 from hashlib import md5
 
 followers = db.Table('followers',
@@ -65,6 +73,9 @@ class User(db.Model):
                 followers.c.follower_id == self.id).order_by(
                 Post.timestamp.desc())
 
+    def sorted_posts(self):
+        return self.posts.order_by(Post.timestamp.desc())
+
     @staticmethod
     def make_unique_nickname(nickname):
         if User.query.filter_by(nickname=nickname).first() is None:
@@ -78,6 +89,8 @@ class User(db.Model):
         return new_nickname
 
 class Post(db.Model):
+    __searchable__ = ['body']
+
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
@@ -85,3 +98,6 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post %r>' % (self.body)
+
+if enable_search:
+    whooshalchemy.whoosh_index(app, Post)
