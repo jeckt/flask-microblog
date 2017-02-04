@@ -1,15 +1,18 @@
+import os
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
-import os
 from flask_login import LoginManager
 from flask_openid import OpenID
+from flask_mail import Mail
+
 from config import basedir, ADMINS
 from config import MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+mail = Mail(app)
 
 lm = LoginManager()
 lm.init_app(app)
