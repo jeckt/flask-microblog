@@ -1,4 +1,7 @@
+app.db
+search.db
 flask
 tmp
 *.pyc
 *.swp
+*.mo
