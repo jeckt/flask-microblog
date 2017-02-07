@@ -1,4 +1,5 @@
 #!flask/bin/python
+# -*- coding: utf-8 encoding -*-
 import os
 import unittest
 
@@ -7,6 +8,7 @@ from datetime import datetime, timedelta
 from config import basedir
 from app import app, db
 from app.models import User, Post
+from app.translate import microsoft_translate
 
 class TestCase(unittest.TestCase):
     def setUp(self):
@@ -117,6 +119,10 @@ class TestCase(unittest.TestCase):
         assert f2 == [p3, p2]
         assert f3 == [p4, p3]
         assert f4 == [p4]
+
+    def test_translation(self):
+        assert microsoft_translate(u'English', 'en', 'es') == u'Ingls'
+        assert microsoft_translate(u'Español', 'es', 'en') == u'Spanish'
 
 if __name__ == '__main__':
     unittest.main()
